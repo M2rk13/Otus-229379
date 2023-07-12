@@ -64,12 +64,12 @@ class QuadraticEquationTest extends TestCase
             ],
             'oneRootEpsilonDisc' => [
                 'parameterList' => [
-                    'a' => 1,
-                    'b' => -2.000003,
-                    'c' => 1.000005,
+                    'a' => 1.0000000000005,
+                    'b' => -2.0000000000005,
+                    'c' => 1.00000000000005,
                 ],
                 'expectedValue' => [
-                    -1.0000015,
+                    -1.0,
                 ],
             ],
         ];

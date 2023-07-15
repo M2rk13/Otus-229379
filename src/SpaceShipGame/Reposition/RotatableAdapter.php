@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\SpaceShipGame\Reposition;
 
 use App\Exception\AngularValueException;
@@ -7,9 +9,8 @@ use App\Exception\PropertyNotFoundException;
 use App\SpaceShipGame\Enum\MovablePropertyEnum;
 use App\SpaceShipGame\SpaceObjects\DefaultMovableObject;
 
-class RotatableAdapter implements RotatableInterface
+class RotatableAdapter extends RepositionAdapter implements RotatableInterface
 {
-    private const ANGULAR_TOTAL = 180;
     private const ANGULAR_STEP = 45;
 
     private DefaultMovableObject $object;
@@ -26,7 +27,7 @@ class RotatableAdapter implements RotatableInterface
     public function setAngular(int $directionAngular): void
     {
         if (abs($directionAngular) > self::ANGULAR_TOTAL) {
-            throw new AngularValueException($directionAngular);
+            throw new AngularValueException((string) $directionAngular);
         }
 
         $newDirectionAngular = (int) round($directionAngular / self::ANGULAR_STEP) * self::ANGULAR_STEP;

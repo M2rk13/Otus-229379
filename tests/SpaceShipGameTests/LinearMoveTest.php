@@ -32,8 +32,18 @@ class LinearMoveTest extends TestCase
         $movableShip->setDirection($direction);
 
         $movableShip->moveSpaceObject();
+        $newCoordinates = $ship->getProperty(MovablePropertyEnum::POSITION);
 
-        self::assertEquals($ship->getProperty(MovablePropertyEnum::POSITION), new Coordinates(...$expectedValue));
+        self::assertEquals(
+            0,
+            bccomp($newCoordinates->x, $expectedValue['x']),
+            sprintf('value not equal: got [%s], expected [%s]', $newCoordinates->x, $expectedValue['x'])
+        );
+        self::assertEquals(
+            0,
+            bccomp($newCoordinates->y, $expectedValue['y']),
+            sprintf('value not equal: got [%s], expected [%s]', $newCoordinates->x, $expectedValue['x'])
+        );
     }
 
     public static function linearMoveDataProvider(): array
@@ -41,16 +51,16 @@ class LinearMoveTest extends TestCase
         return [
             'correctLinearMove' => [
                 'coordinates' => [
-                    'x' => 12,
-                    'y' => 5,
+                    'x' => '12',
+                    'y' => '5',
                 ],
                 'vector' => [
-                    'x' => -7,
-                    'y' => 3
+                    'x' => '-7',
+                    'y' => '3'
                 ],
                 'expectedValue' => [
-                    'x' => 5,
-                    'y' => 8,
+                    'x' => '5',
+                    'y' => '8',
                 ],
             ],
         ];
@@ -94,16 +104,16 @@ class LinearMoveTest extends TestCase
                 'coordinates' => [
                  ],
                 'vector' => [
-                    'x' => 1,
-                    'y' => 1,
+                    'x' => '1',
+                    'y' => '1',
                 ],
                 'expectedException' => PropertyNotFoundException::class,
             ],
             'emptySpeed' => [
                 'object' => DefaultShip::class,
                 'coordinates' => [
-                    'x' => 1,
-                    'y' => 1,
+                    'x' => '1',
+                    'y' => '1',
                 ],
                 'vector' => [
                 ],
@@ -112,12 +122,12 @@ class LinearMoveTest extends TestCase
             'notMovableObject' => [
                 'object' => DefaultStaticObject::class,
                 'coordinates' => [
-                    'x' => 1,
-                    'y' => 1,
+                    'x' => '1',
+                    'y' => '1',
                 ],
                 'vector' => [
-                    'x' => 1,
-                    'y' => 1,
+                    'x' => '1',
+                    'y' => '1',
                 ],
                 'expectedException' => TypeError::class,
             ],

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\SpaceShipGame\Reposition;
 
 use App\Exception\PropertyNotFoundException;
 use App\SpaceShipGame\Enum\MovablePropertyEnum;
 use App\SpaceShipGame\SpaceObjects\DefaultMovableObject;
 
-class MovableAdapter implements MovableInterface
+class MovableAdapter extends RepositionAdapter implements MovableInterface
 {
     private DefaultMovableObject $object;
 
@@ -32,8 +34,8 @@ class MovableAdapter implements MovableInterface
         $position = $this->object->getProperty(MovablePropertyEnum::POSITION);
 
         $newPosition = new Coordinates(
-            $position->x + $direction->x,
-            $position->y + $direction->y,
+            bcadd($position->x, $direction->x),
+            bcadd($position->y, $direction->y),
         );
 
         $this->object->setProperty(MovablePropertyEnum::POSITION, $newPosition);

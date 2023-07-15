@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\Tests\MathematicalFunctionsTests;
 
 use App\Exception\ImpossibleDiscriminantValueException;
 use App\Exception\SeniorCoefficientException;
 use App\MathematicalFunctions\QuadraticEquation;
 use Exception;
 use PHPUnit\Framework\TestCase;
-
 use TypeError;
 
 use function PHPUnit\Framework\assertSame;

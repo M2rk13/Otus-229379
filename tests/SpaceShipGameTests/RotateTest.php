@@ -6,6 +6,7 @@ namespace App\Tests\SpaceShipGameTests;
 
 use App\Exception\AngularValueException;
 use App\Exception\PropertyNotFoundException;
+use App\SpaceShipGame\Command\SimpleCommand\RotateCommand;
 use App\SpaceShipGame\Enum\MovablePropertyEnum;
 use App\SpaceShipGame\Reposition\RotatableAdapter;
 use App\SpaceShipGame\SpaceObjects\DefaultStaticObject;
@@ -30,7 +31,6 @@ class RotateTest extends TestCase
 
         $rotatableShip->setAngular($rotateAngular);
         $rotatableShip->rotateSpaceObject();
-        ob_clean();
 
         self::assertSame($expectedValue, $ship->getProperty(MovablePropertyEnum::ANGULAR_POSITION));
     }
@@ -43,10 +43,10 @@ class RotateTest extends TestCase
                 'rotateAngular' => 45,
                 'expectedValue' => 45,
             ],
-            'rotateDifferFromStep' => [
+            'validBackRotate' => [
                 'startAngular' => 90,
                 'rotateAngular' => -100,
-                'expectedValue' => 0,
+                'expectedValue' => -10,
             ],
         ];
     }
@@ -78,7 +78,6 @@ class RotateTest extends TestCase
         }
 
         $rotatableShip->rotateSpaceObject();
-        ob_clean();
     }
 
     public static function rotateErrorsProvider(): array
@@ -110,5 +109,22 @@ class RotateTest extends TestCase
                 'expectedException' => TypeError::class,
             ],
         ];
+    }
+
+    /**
+     * @dataProvider rotateDataProvider
+     *
+     * @throws PropertyNotFoundException
+     * @throws AngularValueException
+     */
+    public function testRotateCommand(int $startAngular, int $rotateAngular, int $expectedValue): void
+    {
+        $ship = new DefaultShip();
+        $ship->setProperty(MovablePropertyEnum::ANGULAR_POSITION, $startAngular);
+
+        $rotateCommand = new RotateCommand($ship, $rotateAngular);
+        $rotateCommand->execute();
+
+        self::assertSame($expectedValue, $ship->getProperty(MovablePropertyEnum::ANGULAR_POSITION));
     }
 }

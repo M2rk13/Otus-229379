@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\SpaceShipGameTests;
 
 use App\Exception\PropertyNotFoundException;
+use App\SpaceShipGame\Command\SimpleCommand\MoveCommand;
 use App\SpaceShipGame\Enum\MovablePropertyEnum;
 use App\SpaceShipGame\Reposition\Coordinates;
 use App\SpaceShipGame\Reposition\MovableAdapter;
@@ -132,5 +133,34 @@ class LinearMoveTest extends TestCase
                 'expectedException' => TypeError::class,
             ],
         ];
+    }
+
+    /**
+     * @dataProvider linearMoveDataProvider
+     *
+     * @throws PropertyNotFoundException
+     */
+    public function testLinearMoveCommand(array $coordinates, array $vector, array $expectedValue): void
+    {
+        $ship = new DefaultShip();
+        $position = new Coordinates(...$coordinates);
+        $ship->setProperty(MovablePropertyEnum::POSITION, $position);
+        $direction = new Coordinates(...$vector);
+
+        $moveCommand = new MoveCommand($ship, $direction);
+        $moveCommand->execute();
+
+        $newCoordinates = $ship->getProperty(MovablePropertyEnum::POSITION);
+
+        self::assertEquals(
+            0,
+            bccomp($newCoordinates->x, $expectedValue['x']),
+            sprintf('value not equal: got [%s], expected [%s]', $newCoordinates->x, $expectedValue['x'])
+        );
+        self::assertEquals(
+            0,
+            bccomp($newCoordinates->y, $expectedValue['y']),
+            sprintf('value not equal: got [%s], expected [%s]', $newCoordinates->x, $expectedValue['x'])
+        );
     }
 }

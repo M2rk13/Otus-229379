@@ -6,5 +6,5 @@ namespace App\SpaceShipGame\Reposition;
 
 class RepositionAdapter
 {
-    protected const ANGULAR_TOTAL = '180';
+    public const ANGULAR_TOTAL = '180';
 }

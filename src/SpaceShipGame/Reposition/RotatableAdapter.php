@@ -11,8 +11,6 @@ use App\SpaceShipGame\SpaceObjects\DefaultMovableObject;
 
 class RotatableAdapter extends RepositionAdapter implements RotatableInterface
 {
-    private const ANGULAR_STEP = 45;
-
     private DefaultMovableObject $object;
 
     public function __construct(
@@ -30,17 +28,7 @@ class RotatableAdapter extends RepositionAdapter implements RotatableInterface
             throw new AngularValueException((string) $directionAngular);
         }
 
-        $newDirectionAngular = (int) round($directionAngular / self::ANGULAR_STEP) * self::ANGULAR_STEP;
-
-        if ($newDirectionAngular !== $directionAngular) {
-            echo sprintf(
-                'MIN step is %s. Got "Angular": %s',
-                self::ANGULAR_STEP,
-                $newDirectionAngular
-            );
-        }
-
-        $this->object->setProperty(MovablePropertyEnum::ANGULAR_DIRECTION, $newDirectionAngular);
+        $this->object->setProperty(MovablePropertyEnum::ANGULAR_DIRECTION, $directionAngular);
     }
 
     /**
@@ -53,7 +41,7 @@ class RotatableAdapter extends RepositionAdapter implements RotatableInterface
 
         $newPositionAngular = (int) bcmod(
             (string) ($directionAngular + $positionAngular),
-            (string) self::ANGULAR_TOTAL
+            bcmul(self::ANGULAR_TOTAL, '2')
         );
 
         $this->object->setProperty(MovablePropertyEnum::ANGULAR_POSITION, $newPositionAngular);
